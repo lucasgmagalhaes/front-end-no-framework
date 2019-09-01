@@ -1,91 +1,82 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const devMode = process.env.NODE_ENV !== "production";
+
 module.exports = {
-  // Tells Webpack which built-in optimizations to use
-  // In 'production' mode, Webpack will minify and uglify our JS code
-  // If you leave this out, Webpack will default to 'production'
+  // Diz ao Webpack quais otimizações integradas devem ser usadas.
+  // No modo 'produção', o Webpack minimiza e uglifica nosso código JS
+  // Se você deixar isso de fora, o Webpack usará como padrão 'produção'
   mode: devMode ? "development" : "production",
-  // Webpack needs to know where to start the bundling process,
-  // so we define the main JS and Sass files, both under
-  // the './src' directory
+  // Diz ao Webpack onde começar o processo de empacotamento
   entry: ["./src/scripts/main.js", "./src/styles/main.scss"],
-  // This is where we define the path where Webpack will place
-  // the bundled JS file
+  // Define o caminho onde o Webpack colocaráo arquivo JS incluído
   output: {
     path: path.resolve(__dirname, "public"),
-    // Specify the base path for all the assets within your
-    // application. This is relative to the output path, so in
-    // our case it will be ./public/assets
+    // Especifica o caminho base para todos os ativos dentro da
+    // aplicação. Relativo ao caminho de saída.
     publicPath: "/assets",
-    // The name of the output bundle. Path is also relative
-    // to the output path
+    // O nome do pacote configurável de saída.
     filename: "assets/scripts/bundle.js"
   },
   module: {
-    // Array of rules that tells Webpack how the modules (output)
-    // will be created
+    // Matriz de regras que informa ao Webpack como os módulos (saída)
+    // Será criado
     rules: [
       {
-        // Look for JavaScript files and apply the babel-loader
-        // excluding the './node_modules' directory. It uses the
-        // configuration in `.babelrc`
+        // Procura arquivos JavaScript e aplica o babel-loader
+        // excluindo o diretório './node_modules'. Usa o
+        // configuração em `.babelrc`
         test: /\.(js)$/,
         exclude: /node_modules/,
         use: ["babel-loader"]
       },
       {
-        // Look for Sass files and process them according to the
-        // rules specified in the different loaders
+        // Procura arquivos Sass e processa-os de acordo com o
+        // regras especificadas nos diferentes carregadores
         test: /\.(sa|sc)ss$/,
-        // Use the following loaders from right-to-left, so it will
-        // use sass-loader first and ending with MiniCssExtractPlugin
+        // Usa os seguintes carregadores da direita para a esquerda, para que
+        // use o sass-loader primeiro e termine com MiniCssExtractPlugin
         use: [
           {
-            // Extracts the CSS into a separate file and uses the
-            // defined configurations in the 'plugins' section
+            // Extrai o CSS em um arquivo separado e usa as
+            // configurações definidas na seção 'plugins'
             loader: MiniCssExtractPlugin.loader
           },
           {
-            // Interprets CSS
+            // Interpreta CSS
             loader: "css-loader",
             options: {
               importLoaders: 2
             }
           },
           {
-            // Use PostCSS to minify and autoprefix. This loader
-            // uses the configuration in `postcss.config.js`
+            // Usa PostCSS para minificar e corrigir automaticamente. Este carregador
+            // usa a configuração em `postcss.config.js`
             loader: "postcss-loader"
           },
           {
-            // Adds support for Sass files, if using Less, then
-            // use the less-loader
+            // Adiciona suporte para arquivos Sass
             loader: "sass-loader"
           }
         ]
       },
       {
-        // Adds support to load images in your CSS rules. It looks
-        // for .png, .jpg, .jpeg and .gif
+        // Adiciona suporte para carregar imagens nas regras CSS. Parece
+        // para .png, .jpg, .jpeg e .gif
         test: /\.(png|jpe?g|gif)$/,
         use: [
           {
             loader: "file-loader",
             options: {
-              // The image will be named with the original name and
-              // extension
+              // A imagem será nomeada com o nome original e
+              // extensão
               name: "[name].[ext]",
-              // Indicates where the images are stored and will use
-              // this path when generating the CSS files.
-              // Example, in main.scss I have
-              // url('../../public/assets/images/venice-italy.jpg')
-              // and when generating the CSS file, it will be
-              // outputted as url(../images/venice-italy.jpg), which
-              // is relative to /styles/main.css
+              // Indica onde as imagens são armazenadas e usará
+              // esse caminho ao gerar os arquivos CSS.
+              // Exemplo, no main.scss
               publicPath: "../images",
-              // When this option is 'true', the loader will emit
-              // the image to output.path
+              // Quando esta opção é 'true', o carregador emitirá
+              // a imagem para output.path
               emitFile: false
             }
           }
@@ -94,9 +85,8 @@ module.exports = {
     ]
   },
   plugins: [
-    // Configuration options for MiniCssExtractPlugin. Here I'm only
-    // indicating what the CSS outputted file name should be and
-    // the location
+    // Opções de configuração para MiniCssExtractPlugin. Aqui é
+    // indicado qual deve ser o nome do arquivo CSS gerado
     new MiniCssExtractPlugin({
       filename: "assets/styles/main.css"
     })

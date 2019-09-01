@@ -8,8 +8,6 @@
   & > * { grid-column: 2 / -2; }
   header {
     grid-column: 1 / -1;
-    background: #fdbc9a url('../../public/assets/images/venice-italy.jpg') no-repeat center;
-    background-size: cover;
     height: 500px;
     margin-bottom: 20px;
     display: flex;
